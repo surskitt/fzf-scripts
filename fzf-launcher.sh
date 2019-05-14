@@ -14,9 +14,9 @@ get_apps() {
     while read -r df; do
         contents=$(< "${df}")
         name=$(kv "${contents}" "Name")
-        cmd=$(kv "${contents}" "Exec")
+        # cmd=$(kv "${contents}" "Exec")
 
-        echo "${name}	${cmd}"
+        echo "${name}	${df}"
     done <<< "${desktop_files}"
 }
 
@@ -24,9 +24,8 @@ main () {
     apps=$(get_apps)
 
     selection=$(fzf +m -d '	' --with-nth=1 <<< "${apps}")
-
-    executable="${selection% \%*}"
-    nohup "${executable#*	}" &
+    
+    exec nohup dex "${selection#*	}"
 }
 
 main
